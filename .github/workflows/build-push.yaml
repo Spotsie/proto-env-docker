@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: spotsie/protobuf-env:${{steps.vars.outputs.tag}}
+          tags: ghcr.io/spotsie/protobuf-env:${{steps.vars.outputs.tag}}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
