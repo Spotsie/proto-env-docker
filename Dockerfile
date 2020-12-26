@@ -5,6 +5,7 @@ ARG protoc_gen_grpc_java_version=1.28.0
 ARG ts_protoc_gen_version=0.12.0
 ARG nanopb_version=0.4.4
 ARG buf_version=0.33.0
+ARG protodist_version=0.0.10
 
 RUN apt update
 RUN apt install -y curl
@@ -13,6 +14,10 @@ RUN apt install -y curl
 RUN curl -LO https://golang.org/dl/go${go_version}.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go${go_version}.linux-amd64.tar.gz
 ENV PATH=$PATH:/usr/local/go/bin
+ENV GOPATH=/root/go
+ENV GOROOT=/usr/local/go
+ENV GOBIN=$GOPATH/bin
+ENV PATH=$PATH:$GOBIN
 
 # Intall NodeJS
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
@@ -34,13 +39,6 @@ RUN chmod a+x protoc-gen-grpc-java && mv protoc-gen-grpc-java /bin/protoc-gen-gr
 
 # Install protoc-gen-ts plugin required (protoc --ts_out)
 RUN npm i -g ts-protoc-gen@$ts_protoc_gen_version typescript@3.8.3
-
-
-ENV GOPATH=/root/go
-ENV GOROOT=/usr/local/go
-ENV GOBIN=$GOPATH/bin
-ENV PATH=$PATH:$GOBIN
-
 
 RUN apt install unzip
 # Install protoc
@@ -70,5 +68,10 @@ RUN cd nanopb-${nanopb_version}-linux-x86/generator-bin/ && rm protoc && cp -R *
 # Install Buf
 RUN curl -L https://github.com/bufbuild/buf/releases/download/v${buf_version}/buf-Linux-x86_64.tar.gz | tar -xz
 RUN chmod +x buf/bin/* && mv buf/bin/* /bin/
+
+# Install protodist
+RUN curl -L https://github.com/4nte/protodist/releases/download/${protodist_version}/protodist_${protodist_version}_Linux_amd64.tar.gz | tar -xz
+RUN chmod +x protodist
+RUN mv protodist /bin/protodist
 
 ENTRYPOINT /bin/sh
