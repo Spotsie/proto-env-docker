@@ -8,7 +8,7 @@ ARG buf_version=0.33.0
 ARG protodist_version="0.1.0-alpha.6"
 
 RUN apt update
-RUN apt install -y curl
+RUN apt install -y curl xxd
 
 # Install Golang
 RUN curl -LO https://golang.org/dl/go${go_version}.linux-amd64.tar.gz
