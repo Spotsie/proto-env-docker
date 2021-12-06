@@ -1,11 +1,11 @@
 FROM debian:stretch-slim
 
-ARG go_version=1.15.6
+ARG go_version=1.16.5
 ARG protoc_gen_grpc_java_version=1.28.0
 ARG ts_protoc_gen_version=0.12.0
 ARG nanopb_version=0.4.4
 ARG buf_version=0.33.0
-ARG protodist_version="0.1.0-alpha.6"
+ARG protodist_version="0.1.0-alpha.10"
 
 RUN apt update
 RUN apt install -y curl xxd
@@ -48,14 +48,15 @@ RUN unzip protoc-3.13.0-linux-x86_64.zip -d /usr/local
 
 # Install protoc-gen-go
 RUN go get -u google.golang.org/protobuf/cmd/protoc-gen-go
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go
+RUN GO111MODULE=on go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 
 # Install protoc-gen-go-grpc
 RUN go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
-RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+RUN GO111MODULE=on go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 # Install protoc-gen-validate
-RUN go get -d github.com/envoyproxy/protoc-gen-validate
+RUN GO111MODULE=off go get -d github.com/envoyproxy/protoc-gen-validate
+RUN ls $GOPATH
 RUN cd $GOPATH/src/github.com/envoyproxy/protoc-gen-validate && make build
 
 # Install Nanopb
