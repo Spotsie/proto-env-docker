@@ -4,7 +4,7 @@ ARG go_version=1.16.5
 ARG protoc_gen_grpc_java_version=1.28.0
 ARG ts_protoc_gen_version=0.12.0
 ARG nanopb_version=0.4.4
-ARG buf_version=0.33.0
+ARG buf_version="1.0.0-rc8"
 ARG protodist_version="0.1.0-alpha.10"
 
 RUN apt update
