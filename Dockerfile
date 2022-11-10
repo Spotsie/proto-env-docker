@@ -14,6 +14,8 @@ ARG GO_GEN_VERION=1.28.0
 ARG GO_GRPC_URL="google.golang.org/protobuf/cmd/protoc-gen-go@v$GO_GEN_VERION"
 RUN go install $GO_GRPC_URL
 
+RUN go install github.com/bufbuild/connect-go/cmd/protoc-gen-connect-go@latest
+
 # See https://pkg.go.dev/google.golang.org/grpc/cmd/protoc-gen-go-grpc
 ARG GO_GRPC_VERSION=1.2.0
 ARG GO_GRPC_URL="google.golang.org/grpc/cmd/protoc-gen-go-grpc@v$GO_GRPC_VERSION"
@@ -61,6 +63,7 @@ RUN echo "Installing protoc-$PROTOBUF_VERSION-$PROTOBUF_PLATFORM" && \
 COPY --from=js /node /node
 COPY --from=go /go/bin/protoc-gen-go /usr/local/bin/
 COPY --from=go /go/bin/protoc-gen-go-grpc /usr/local/bin/
+COPY --from=go /go/bin/protoc-gen-connect-go /usr/local/bin/
 COPY --from=java /go/bin/protoc-gen-grpc-java /usr/local/bin/
 
 
