@@ -74,4 +74,7 @@ RUN curl -L https://github.com/4nte/protodist/releases/download/v${protodist_ver
 RUN chmod +x protodist
 RUN mv protodist /bin/protodist
 
-CMD buf
+COPY --from=go /usr/local/go/ /usr/local/go/
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+ENTRYPOINT bash
