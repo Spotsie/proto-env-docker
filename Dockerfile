@@ -63,6 +63,7 @@ RUN echo "Installing protoc-$PROTOBUF_VERSION-$PROTOBUF_PLATFORM" && \
 COPY --from=js /node /node
 COPY --from=go /go/bin/protoc-gen-go /usr/local/bin/
 COPY --from=go /go/bin/protoc-gen-go-grpc /usr/local/bin/
+COPY --from=go /go/bin/protoc-gen-doc /usr/local/bin/
 COPY --from=go /go/bin/protoc-gen-connect-go /usr/local/bin/
 COPY --from=java /go/bin/protoc-gen-grpc-java /usr/local/bin/
 
