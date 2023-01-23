@@ -67,11 +67,13 @@ COPY --from=go /go/bin/protoc-gen-doc /usr/local/bin/
 COPY --from=go /go/bin/protoc-gen-connect-go /usr/local/bin/
 COPY --from=java /go/bin/protoc-gen-grpc-java /usr/local/bin/
 
+RUN curl -LO https://github.com/pseudomuto/protoc-gen-doc/releases/download/v1.5.1/protoc-gen-doc_1.5.1_linux_amd64.tar.gz > protoc-gen-doc
+RUN chmod +x protoc-gen-doc && mv protoc-gen-doc /usr/local/bin/
 
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-connect-web/bin/protoc-gen-connect-web /usr/local/bin/protoc-gen-connect-web
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-es/bin/protoc-gen-es /usr/local/bin/protoc-gen-es
 
-ARG protodist_version="1.0.0-alpha.2"
+ARG protodist_version="1.0.0-alpha.6"
 
 # Install protodist
 RUN curl -L https://github.com/4nte/protodist/releases/download/v${protodist_version}/protodist_${protodist_version}_Linux_amd64.tar.gz| tar -xz
