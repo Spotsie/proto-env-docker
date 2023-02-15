@@ -69,7 +69,7 @@ RUN ln -s /node/node_modules/@bufbuild/protoc-gen-connect-web/bin/protoc-gen-con
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-es/bin/protoc-gen-es /usr/local/bin/protoc-gen-es
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-connect-query/bin/protoc-gen-connect-query /usr/local/bin/protoc-gen-connect-query
 
-ARG protodist_version="1.0.0-alpha.6"
+ARG protodist_version="1.0.0-alpha.7"
 
 # Install protodist
 RUN curl -L https://github.com/4nte/protodist/releases/download/v${protodist_version}/protodist_${protodist_version}_Linux_amd64.tar.gz| tar -xz
