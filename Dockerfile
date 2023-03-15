@@ -3,7 +3,7 @@
 #  > wget https://packages.grpc.io/# -O - | xmllint --xpath 'packages/builds/build[@commit="a3b54ef90841ec45fe5e28f54245b7944d0904f9"]' -
 
 # Go compilers
-FROM golang:1.18-alpine AS go
+FROM golang:1.19-alpine AS go
 
 RUN apk add --no-cache git
 
