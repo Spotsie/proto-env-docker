@@ -61,6 +61,7 @@ COPY --from=go /go/bin/protoc-gen-go-grpc /usr/local/bin/
 
 COPY --from=go /go/bin/protoc-gen-connect-go /usr/local/bin/
 COPY --from=java /go/bin/protoc-gen-grpc-java /usr/local/bin/
+RUN chmod +x /usr/local/bin/protoc-gen-grpc-java
 
 RUN curl -LO https://github.com/pseudomuto/protoc-gen-doc/releases/download/v1.5.1/protoc-gen-doc_1.5.1_linux_amd64.tar.gz > protoc-gen-doc
 RUN chmod +x protoc-gen-doc && mv protoc-gen-doc /usr/local/bin/
