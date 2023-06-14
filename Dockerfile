@@ -40,6 +40,7 @@ RUN echo "Installing protoc-gen-grpc-java-$JAVA_GRPC_VERSION-$JAVA_PLATFORM" && 
 ARG BUF_VERSION=1.3.1
 FROM bufbuild/buf:1.3.1
 
+RUN apk update && apk upgrade
 RUN apk add --no-cache unzip
 RUN apk add --no-cache gcompat
 RUN apk add bash nodejs curl
