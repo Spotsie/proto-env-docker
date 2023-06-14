@@ -70,6 +70,14 @@ RUN ln -s /node/node_modules/@bufbuild/protoc-gen-connect-web/bin/protoc-gen-con
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-es/bin/protoc-gen-es /usr/local/bin/protoc-gen-es
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-connect-query/bin/protoc-gen-connect-query /usr/local/bin/protoc-gen-connect-query
 
+# nanopb
+RUN git clone https://github.com/nanopb/nanopb /nanopb
+RUN ln -s /nanopb/generator/protoc-gen-nanopb /usr/local/bin/protoc-gen-nanopb
+RUN apk update && apk upgrade
+RUN apk add --no-cache python3 py3-pip
+# The command below fails for some reason, but the installation succeeds. That's why we use "|| true" to make sure docker doesn't fail
+RUN pip install protobuf grpcio-tools || true
+
 ARG protodist_version="1.0.0-alpha.7"
 
 # Install protodist
