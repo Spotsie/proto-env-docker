@@ -3,7 +3,7 @@
 #  > wget https://packages.grpc.io/# -O - | xmllint --xpath 'packages/builds/build[@commit="a3b54ef90841ec45fe5e28f54245b7944d0904f9"]' -
 
 # Go compilers
-FROM golang:1.19-alpine AS go
+FROM golang:1.20-alpine AS go
 
 RUN apk add --no-cache git
 
@@ -23,7 +23,7 @@ RUN go install $GO_GRPC_URL
 FROM node:hydrogen as js
 workdir /node
 RUN npm install --save-dev @bufbuild/protoc-gen-connect-web @bufbuild/protoc-gen-es @bufbuild/protoc-gen-connect-query
-RUN npm install @bufbuild/connect-web @bufbuild/protobuf @bufbuild/connect-query
+RUN npm install --force @bufbuild/connect-web @bufbuild/protobuf @bufbuild/connect-query
 
 
 FROM golang:1.18-alpine AS java
@@ -35,11 +35,10 @@ ARG JAVA_PLATFORM=linux-x86_64
 ARG JAVA_GRPC_URL="https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/$JAVA_GRPC_VERSION/protoc-gen-grpc-java-$JAVA_GRPC_VERSION-$JAVA_PLATFORM.exe"
 
 RUN echo "Installing protoc-gen-grpc-java-$JAVA_GRPC_VERSION-$JAVA_PLATFORM" && \
-    wget --quiet "$JAVA_GRPC_URL" -O /go/bin/protoc-gen-grpc-java
+    wget "$JAVA_GRPC_URL" -O /go/bin/protoc-gen-grpc-java
 
 ARG BUF_VERSION=1.3.1
 FROM bufbuild/buf:1.3.1
-
 RUN apk update && apk upgrade
 RUN apk add --no-cache unzip
 RUN apk add --no-cache gcompat
@@ -64,20 +63,27 @@ COPY --from=go /go/bin/protoc-gen-connect-go /usr/local/bin/
 COPY --from=java /go/bin/protoc-gen-grpc-java /usr/local/bin/
 RUN chmod +x /usr/local/bin/protoc-gen-grpc-java
 
-RUN curl -LO https://github.com/pseudomuto/protoc-gen-doc/releases/download/v1.5.1/protoc-gen-doc_1.5.1_linux_amd64.tar.gz > protoc-gen-doc
-RUN chmod +x protoc-gen-doc && mv protoc-gen-doc /usr/local/bin/
+# RUN curl -LO https://github.com/pseudomuto/protoc-gen-doc/releases/download/v1.5.1/protoc-gen-doc_1.5.1_linux_amd64.tar.gz > protoc-gen-doc
+# RUN chmod +x protoc-gen-doc && mv protoc-gen-doc /usr/local/bin/
 
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-connect-web/bin/protoc-gen-connect-web /usr/local/bin/protoc-gen-connect-web
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-es/bin/protoc-gen-es /usr/local/bin/protoc-gen-es
 RUN ln -s /node/node_modules/@bufbuild/protoc-gen-connect-query/bin/protoc-gen-connect-query /usr/local/bin/protoc-gen-connect-query
 
+
 # nanopb
-RUN git clone https://github.com/nanopb/nanopb /nanopb
-RUN ln -s /nanopb/generator/protoc-gen-nanopb /usr/local/bin/protoc-gen-nanopb
+# RUN git clone https://github.com/nanopb/nanopb /nanopb
+# RUN ln -s /nanopb/generator/protoc-gen-nanopb /usr/local/bin/protoc-gen-nanopb
 RUN apk update && apk upgrade
-RUN apk add --no-cache python3 py3-pip
-# The command below fails for some reason, but the installation succeeds. That's why we use "|| true" to make sure docker doesn't fail
-RUN pip install protobuf grpcio-tools || true
+RUN apk add python3 py3-pip
+# RUN echo "#include <unistd.h>" > /usr/include/sys/unistd.h
+
+RUN apk add build-base python3-dev linux-headers
+
+# RUN python3 -m pip3 install --upgrade pip3
+RUN pip install grpcio grpcio-tools grpclib
+
+# RUN pip install protobuf grpcio-tools || true
 
 ARG protodist_version="1.0.0-alpha.7"
 
@@ -92,4 +98,4 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 RUN mkdir /root/.ssh && chmod 0700 /root/.ssh \
     && ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 
-ENTRYPOINT bash
+CMD bash
