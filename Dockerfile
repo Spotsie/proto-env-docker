@@ -12,7 +12,7 @@ ARG GO_GEN_VERION=1.28.0
 ARG GO_GRPC_URL="google.golang.org/protobuf/cmd/protoc-gen-go@v$GO_GEN_VERION"
 RUN go install $GO_GRPC_URL
 
-RUN go install github.com/bufbuild/connect-go/cmd/protoc-gen-connect-go@latest
+RUN go install connectrpc.com/connect/cmd/protoc-gen-connect-go@latest
 
 # See https://pkg.go.dev/google.golang.org/grpc/cmd/protoc-gen-go-grpc
 ARG GO_GRPC_VERSION=1.2.0
